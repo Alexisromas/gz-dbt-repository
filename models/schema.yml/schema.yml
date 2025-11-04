@@ -1,12 +1,64 @@
 version: 2
 
 sources:
-  - name: raw                       
-    schema: gz_raw_data            
+  - name: raw
+    schema: votre_schema  
+    description: "Données brutes extraites des systèmes opérationnels."
+
     tables:
-      - name: sales                
-        identifier: raw_gz_sales   
       - name: product
-        identifier: raw_gz_product
+        description: "Table contenant la liste des produits."
+        columns:
+          - name: products_id
+            description: "Identifiant unique du produit (primary key)."
+            tests:
+              - not_null
+              - unique
+          - name: purchase_price
+            description: "Prix d'achat du produit, casté en FLOAT64."
+            tests:
+              - not_null
+
+      - name: sales
+        description: "Table des ventes, avec une ligne par transaction."
+        columns:
+          - name: date_date
+            description: "Date de la transaction."
+            tests:
+              - not_null
+          - name: orders_id
+            description: "Identifiant unique de la commande (primary key)."
+            tests:
+              - not_null
+              - unique
+          - name: products_id
+            description: "Identifiant du produit vendu."
+            tests:
+              - not_null
+          - name: revenue
+            description: "Revenu généré par la vente."
+            tests:
+              - not_null
+          - name: quantity
+            description: "Quantité vendue du produit."
+            tests:
+              - not_null
+
       - name: ship
-        identifier: raw_gz_ship
+        description: "Données de livraison des commandes."
+        columns:
+          - name: orders_id
+            description: "Identifiant unique de la commande (primary key)."
+            tests:
+              - not_null
+              - unique
+          - name: shipping_fee_1
+            description: "Frais d'expédition conservés après comparaison avec shipping_fee."
+            tests:
+              - not_null
+          - name: logcost
+            description: "Valeur logistique ou supplémentaire sur la livraison."
+          - name: ship_cost
+            description: "Coût de livraison, casté en FLOAT64."
+            tests:
+              - not_null
