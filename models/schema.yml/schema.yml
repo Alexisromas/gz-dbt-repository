@@ -2,11 +2,12 @@ version: 2
 
 sources:
   - name: raw
-    schema: votre_schema  
+    schema: gz_raw_data
     description: "Données brutes extraites des systèmes opérationnels."
 
     tables:
       - name: product
+        identifier: raw_gz_product
         description: "Table contenant la liste des produits."
         columns:
           - name: products_id
@@ -20,6 +21,7 @@ sources:
               - not_null
 
       - name: sales
+        identifier: raw_gz_sales
         description: "Table des ventes, avec une ligne par transaction."
         columns:
           - name: date_date
@@ -45,6 +47,7 @@ sources:
               - not_null
 
       - name: ship
+        identifier: raw_gz_ship
         description: "Données de livraison des commandes."
         columns:
           - name: orders_id
@@ -52,7 +55,7 @@ sources:
             tests:
               - not_null
               - unique
-          - name: shipping_fee_1
+          - name: shipping_fee
             description: "Frais d'expédition conservés après comparaison avec shipping_fee."
             tests:
               - not_null
