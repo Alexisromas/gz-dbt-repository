@@ -1,3 +1,4 @@
+{{ config(materialized='finance_days.sql') }}
 WITH orders_per_day AS (
    SELECT
      date_date
@@ -7,13 +8,12 @@ WITH orders_per_day AS (
      ,ROUND(SUM(operational_margin),0) AS operational_margin
      ,ROUND(SUM(purchase_cost),0) AS purchase_cost
      ,ROUND(SUM(shipping_fee),0) AS shipping_fee
-     ,ROUND(SUM(log_cost),0) AS log_cost
-     ,ROUND(SUM(ship_cost),0) AS ship_cost
+     ,ROUND(SUM(logcost),0) AS logcost
+     ,ROUND(SUM(CAST(ship_cost AS FLOAT64)),0) AS ship_cost_ok
      ,SUM(quantity) AS quantity
  FROM {{ref("int_orders_operational")}}
  GROUP BY  date_date
  )
-
  SELECT
      date_date
      , revenue
@@ -21,9 +21,11 @@ WITH orders_per_day AS (
      , operational_margin
      , purchase_cost
      , shipping_fee
-     , log_cost
-     , ship_cost
+     , logcost
+     , ship_cost_ok
      , quantity
      , ROUND(revenue/NULLIF(nb_transactions, 0), 2) AS average_basket
  FROM orders_per_day
  ORDER BY  date_date DESC
+
+ 
