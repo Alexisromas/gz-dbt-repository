@@ -73,10 +73,42 @@ sources:
 
       - name: adwords
         identifier: raw_gz_adwords
-        
+        description: "Données des campagnes Google Ads."
+        columns: &ad_columns
+          - name: date_date
+            description: "Date de la campagne."
+            tests: [not_null]
+          - name: campaign_key
+            description: "Identifiant unique de la campagne."
+            tests: [not_null]
+          - name: camPGN_name
+            description: "Nom de la campagne publicitaire."
+          - name: ads_cost
+            description: "Coût de la campagne (à caster en FLOAT64)."
+        tests:
+          - unique:
+              column_name: "concat(date_date, '-', campaign_key)"
+
       - name: bing
         identifier: raw_gz_bing
+        description: "Données des campagnes Bing Ads."
+        columns: *ad_columns
+        tests:
+          - unique:
+              column_name: "concat(date_date, '-', campaign_key)"
+
       - name: criteo
         identifier: raw_gz_criteo
+        description: "Données des campagnes Criteo."
+        columns: *ad_columns
+        tests:
+          - unique:
+              column_name: "concat(date_date, '-', campaign_key)"
+
       - name: facebook
         identifier: raw_gz_facebook
+        description: "Données des campagnes Facebook Ads."
+        columns: *ad_columns
+        tests:
+          - unique:
+              column_name: "concat(date_date, '-', campaign_key)"
